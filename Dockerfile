@@ -25,4 +25,7 @@ EXPOSE 8080
 # recommended: non-root user for safety (optional)
 USER 1000
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+# If you used multi-stage build and copied app.jar
+ENTRYPOINT ["sh","-c","java -jar /app/app.jar --server.port=${PORT:-8080}"]
+
+
