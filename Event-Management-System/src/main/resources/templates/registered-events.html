@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Registered Events</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#0d0d12; color:#e5e3ff; }
+    .card { background:#c3c3ec; border:none; }
+    .section-title { color:#b096ff; font-weight:700; }
+    .muted { color:#9b98bf; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg" style="background:#302d40;">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/user/dashboard">Event Management System</a>
+
+    <div class="ms-auto d-flex align-items-center gap-3">
+
+      <a href="/user/dashboard" class="btn btn-primary btn-sm">Dashboard</a>
+
+      <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <h3 class="section-title">Your Registered Events</h3>
+
+  <div class="row g-3 mt-3">
+    <div class="col-md-6" th:each="ev : ${registeredEvents}">
+      <div class="card p-3">
+        <h5 th:text="${ev.title}">Event Title</h5>
+        <div class="muted small" th:text="${ev.date}">Date</div>
+        <p class="mt-2" th:text="${ev.venue}">Venue</p>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <a th:href="@{|/events/${ev.id}|}" class="btn btn-outline-light btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" th:if="${#lists.isEmpty(registeredEvents)}">
+      <div class="card p-3 text-center">You have not registered for any events yet.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+##############################
+# EVENT MANAGEMENT SYSTEM API
+##############################
+
+--------------------------
+ USER AUTHENTICATION
+--------------------------
+GET  /login               → Login page
+GET  /register            → User registration page
+POST /save-user           → Save new user
+GET  /logout              → Logout
+
+
+--------------------------
+ USER DASHBOARD
+--------------------------
+GET /home                         → User dashboard
+GET /events                       → List all events (with filters/search)
+GET /events/{id}                  → Event details page
+GET /events/register/{id}         → Register for event
+
+
+--------------------------
+ ADMIN - EVENTS
+--------------------------
+GET  /admin/events                → Admin dashboard (list events)
+GET  /admin/events/add            → Add event form
+POST /admin/events/save           → Create event
+GET  /admin/events/edit/{id}      → Edit event form
+POST /admin/events/update         → Update event
+GET  /admin/events/delete/{id}    → Delete event
+
+
+--------------------------
+ ADMIN - REGISTRATIONS / ATTENDANCE
+--------------------------
+GET  /admin/events/{id}/registrations      → List registered users for event
+POST /admin/events/attendance/update        → Update attendance for 1 record
+POST /admin/events/attendance/update-all    → Update all attendance in batch
+
+
+--------------------------
+ INTERNAL METHODS (SERVICE)
+--------------------------
+EventService:
+- getAllEvents()
+- getEventById(id)
+- saveEvent(event)
+- deleteEvent(id)
+- searchByTitleOrCategory()
+
+RegistrationService:
+- registerForEvent()
+- isUserRegistered(email, eventId)
+- findByEventId(eventId)
+- markAttendance(regId, attended)
+
+MailService:
+- sendRegistrationMail(email, eventTitle)
