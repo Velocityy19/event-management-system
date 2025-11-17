@@ -1,28 +1,28 @@
 # ---- Build Stage ----
-FROM maven:3.9.4-eclipse-temurin-17 AS build
+FROM maven:3.9.4-eclipse-temurin-17 AS builder
+WORKDIR /workspace
 
-WORKDIR /app
-
-# Copy pom.xml first (dependency caching)
+# copy only pom first to cache dependencies
 COPY pom.xml .
 
-# Download dependencies (this makes following builds faster)
-RUN mvn dependency:go-offline -B
+# download dependencies (speeds up rebuilds)
+RUN mvn -q -DskipTests dependency:go-offline
 
-# Copy source code
+# copy source and build
 COPY src ./src
-
-# Build the Spring Boot application
-RUN mvn clean package -DskipTests
+RUN mvn -q -DskipTests package
 
 # ---- Run Stage ----
-FROM openjdk:17-jdk-slim
-
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copy the final jar from build stage
-COPY --from=build /app/target/*.jar app.jar
+# copy jar produced by the builder stage (adjust if your artifact path/name differs)
+COPY --from=builder /workspace/target/*.jar app.jar
 
+# expose port your app uses (change if not 8080)
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# recommended: non-root user for safety (optional)
+USER 1000
+
+ENTRYPOINT ["java","-jar","/app/app.jar"]
